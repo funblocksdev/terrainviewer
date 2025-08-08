@@ -194,12 +194,13 @@ main {
 }
 
 #color-picker-container {
-    padding: 0.75rem; /* 从1rem减小到0.75rem */
+    padding: 0.75rem;
     background: #f9f9f9;
     border-radius: 8px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem; /* 从1rem减小到0.5rem */
+    row-gap: 0.1rem; /* 保持行间距为0.5rem */
+    column-gap: 5rem; /* 将列间距从1rem增加到1.5rem */
 }
 
 .color-picker-item label {
