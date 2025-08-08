@@ -226,3 +226,26 @@ main {
     color: #d9534f;
     font-weight: bold;
 }
+
+#terrain-data {
+    display: none;
+}
+
+.arrow-toggle {
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+    display: inline-block;
+    color: #5bc0de;
+    font-weight: bold;
+}
+
+.arrow-toggle:hover {
+    color: #31b0d5;
+}
+
+.arrow-toggle.rotated {
+    transform: rotate(90deg);
+    color: #d9534f;
+}

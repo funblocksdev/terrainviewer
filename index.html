@@ -47,14 +47,26 @@
                     <div id="color-picker-container"></div>
                 </div>
                 <div class="info-container">
-                    <h3>Chunk Address:</h3>
-                    <p id="chunk-address"></p>
-                    <h3>Raw Terrain Data:</h3>
+                    <h3>
+                        Chunk Address:
+                        <span id="toggle-chunk-address" class="arrow-toggle">&#9654;</span>
+                    </h3>
+                    <p id="chunk-address" style="display: none;"></p>
+                    <h3>
+                        Raw Terrain Data:
+                        <span id="toggle-terrain-data" class="arrow-toggle">&#9654;</span>
+                    </h3>
                     <pre id="terrain-data"></pre>
-                    <h3>Decoded Header:</h3>
-                    <div id="decoded-data"></div>
-                    <h3>Debug Info:</h3>
-                    <pre id="debug-info"></pre>
+                    <h3>
+                        Decoded Header:
+                        <span id="toggle-decoded-header" class="arrow-toggle">&#9654;</span>
+                    </h3>
+                    <div id="decoded-data" style="display: none;"></div>
+                    <h3>
+                        Debug Info:
+                        <span id="toggle-debug-info" class="arrow-toggle">&#9654;</span>
+                    </h3>
+                    <pre id="debug-info" style="display: none;"></pre>
                     <p id="error"></p>
                 </div>
             </div>

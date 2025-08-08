@@ -9,7 +9,29 @@ document.addEventListener('DOMContentLoaded', () => {
         getTerrainButton.addEventListener('click', handleFetchTerrain);
     }
     initializeColorPickers();
+    
+    // Add event listener for the toggle arrows
+    setupToggleArrow('toggle-chunk-address', 'chunk-address');
+    setupToggleArrow('toggle-terrain-data', 'terrain-data');
+    setupToggleArrow('toggle-decoded-header', 'decoded-data');
+    setupToggleArrow('toggle-debug-info', 'debug-info');
 });
+
+function setupToggleArrow(arrowId: string, targetId: string) {
+    const toggleArrow = document.getElementById(arrowId);
+    const targetElement = document.getElementById(targetId);
+    if (toggleArrow && targetElement) {
+        toggleArrow.addEventListener('click', () => {
+            if (targetElement.style.display === 'none' || targetElement.style.display === '') {
+                targetElement.style.display = 'block';
+                toggleArrow.classList.add('rotated');
+            } else {
+                targetElement.style.display = 'none';
+                toggleArrow.classList.remove('rotated');
+            }
+        });
+    }
+}
 
 function initializeCoordSync() {
     const inputs = {
