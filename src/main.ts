@@ -1,5 +1,5 @@
 import './style.css';
-import { getTerrainData, decodeTerrainHeader, chunkToVoxelPos, voxelToChunkPos } from './terrain';
+import { getTerrainData, decodeTerrainHeader, chunkToVoxelPos, voxelToChunkPos, CHUNK_WIDTH } from './terrain';
 import { displaySlice, initializeColorPickers } from './ui';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,8 +22,6 @@ function initializeCoordSync() {
     };
 
     let isUpdating = false; // Flag to prevent infinite loops
-
-    const CHUNK_WIDTH = 16;
 
     // Voxel to Chunk
     ['x', 'y', 'z'].forEach(axis => {
@@ -104,9 +102,9 @@ async function handleFetchTerrain() {
 }
 
 function setupSliceControls(y: number, data: string) {
-    const chunkY = Math.floor(y / 16);
-    const minY = chunkY * 16;
-    const maxY = (chunkY + 1) * 16 - 1;
+    const chunkY = Math.floor(y / CHUNK_WIDTH);
+    const minY = chunkY * CHUNK_WIDTH;
+    const maxY = (chunkY + 1) * CHUNK_WIDTH - 1;
 
     const ySlider = document.getElementById('y-slider') as HTMLInputElement;
     const yLabel = document.getElementById('y-label')!;

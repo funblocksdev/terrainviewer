@@ -2,7 +2,7 @@ import { getCreate2Address, getCreateAddress, pad, toBytes, toHex } from 'viem';
 type Hex = `0x${string}`
 import { client, worldAddress, DEFAULT_CREATE3_PROXY_INITCODE_HASH } from './viem';
 
-const CHUNK_WIDTH = 16;
+export const CHUNK_WIDTH = 16;
 
 // --- Vector Math ---
 class Vec3 {
