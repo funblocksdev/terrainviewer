@@ -6,26 +6,47 @@
     <title>DUST Terrain Viewer</title>
 </head>
 <body>
-    <h1>DUST Terrain Viewer</h1>
-    <div id="coords-input">
-        <label for="x">X:</label>
-        <input type="number" id="x" placeholder="X" value="0">
-        <label for="y">Y:</label>
-        <input type="number" id="y" placeholder="Y" value="0">
-        <label for="z">Z:</label>
-        <input type="number" id="z" placeholder="Z" value="0">
-        <button id="get-terrain-button">Get Terrain Data</button>
-    </div>
-    <div id="output">
-        <h3>Chunk Address:</h3>
-        <p id="chunk-address"></p>
-        <h3>Raw Terrain Data (Contract Bytecode):</h3>
-        <pre id="terrain-data">Enter coordinates and click the button to see data.</pre>
-        <h3>Decoded Terrain Data:</h3>
-        <div id="decoded-data">Decoded data will appear here.</div>
-        <p id="error"></p>
-        <h3>Debug Information:</h3>
-        <pre id="debug-info">Debug information will appear here.</pre>
+    <div class="container">
+        <header>
+            <h1>DUST Terrain Viewer</h1>
+        </header>
+        <main>
+            <div class="controls-container">
+                <div id="coords-input">
+                    <label for="x">X:</label>
+                    <input type="number" id="x" placeholder="X" value="0">
+                    <label for="y">Y:</label>
+                    <input type="number" id="y" placeholder="Y" value="0">
+                    <label for="z">Z:</label>
+                    <input type="number" id="z" placeholder="Z" value="0">
+                    <button id="get-terrain-button">Get Terrain Data</button>
+                </div>
+            </div>
+
+            <div class="output-container">
+                <div class="terrain-viewer">
+                    <div class="slice-container-wrapper">
+                        <div id="slice-container"></div>
+                        <div class="vertical-slider-container">
+                            <label for="y-slider" id="y-label">Y: 0</label>
+                            <input type="range" id="y-slider" min="0" max="15" value="0" orient="vertical">
+                        </div>
+                    </div>
+                    <div id="color-picker-container"></div>
+                </div>
+                <div class="info-container">
+                    <h3>Chunk Address:</h3>
+                    <p id="chunk-address"></p>
+                    <h3>Raw Terrain Data:</h3>
+                    <pre id="terrain-data"></pre>
+                    <h3>Decoded Header:</h3>
+                    <div id="decoded-data"></div>
+                    <h3>Debug Info:</h3>
+                    <pre id="debug-info"></pre>
+                    <p id="error"></p>
+                </div>
+            </div>
+        </main>
     </div>
     <script type="module" src="/src/main.ts"></script>
 </body>
