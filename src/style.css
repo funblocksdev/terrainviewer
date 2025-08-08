@@ -56,9 +56,8 @@ main {
     display: flex;
     gap: 0.5rem; /* Gap between labels and inputs */
     align-items: center;
-    border: 1px solid #e0e0e0;
+    /* 删除边框相关样式 */
     padding: 1rem;
-    border-radius: 8px;
 }
 
 .coord-group span {
