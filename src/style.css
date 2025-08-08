@@ -54,37 +54,22 @@ main {
 
 .coord-group {
     display: flex;
-    gap: 0.5rem; /* Gap between labels and inputs */
+    gap: 0.5rem;
     align-items: center;
-    /* 删除边框相关样式 */
-    padding: 1rem;
-}
-
-.coord-group span {
-    font-weight: 500;
-    margin-right: 0.5rem;
-}
-
-#coords-input label {
-    font-weight: 500;
+    padding: 0.5rem; /* 从1rem减小到0.5rem */
 }
 
 #coords-input input[type="number"] {
     width: 80px;
-    padding: 0.75rem;
+    padding: 0.5rem; /* 从0.75rem减小到0.5rem */
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.2s;
 }
 
-#coords-input input[type="number"]:focus {
-    border-color: #5bc0de;
-    outline: none;
-}
-
 #get-terrain-button {
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem; /* 垂直内边距从0.75rem减小到0.5rem */
     background-color: #5bc0de;
     color: white;
     border: none;
