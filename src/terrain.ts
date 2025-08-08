@@ -6,7 +6,16 @@ const CHUNK_WIDTH = 16;
 
 // --- Vector Math ---
 class Vec3 {
-    constructor(public x: number, public y: number, public z: number) {}
+    x: number;
+    y: number;
+    z: number;
+    
+    constructor(x: number, y: number, z: number) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    
     scale(n: number): Vec3 {
         return new Vec3(this.x * n, this.y * n, this.z * n);
     }
@@ -28,10 +37,11 @@ function voxelToChunkPos(p: Vec3): [number, number, number] {
     return [chunkCoords.x, chunkCoords.y, chunkCoords.z];
 }
 
-function getChunkSalt(coord: [number, number, number]): Hex {
+function getChunkSalt(coord: [number, number, number]): `0x${string}` {
     const packed = packVec3(coord);
     const packedBytes = toBytes(packed, { size: 12 });
-    return pad(packedBytes, { size: 32 });
+    const padded = pad(packedBytes, { size: 32 });
+    return toHex(padded) as `0x${string}`;
 }
 
 // --- Create3 Address Logic ---
