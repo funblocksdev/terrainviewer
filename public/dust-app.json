@@ -3,7 +3,7 @@
   "name": "Terrain Viewer",
   "startUrl": "/",
   "defaultSize": {
-    "width": 1260,
+    "width": 500,
     "height": 635
   }
 }
