@@ -22,13 +22,12 @@ header h1 {
 
 main {
     width: 500px;
-    max-width: 480px; /* 从500px改为480px */
+    max-width: 480px;
     background: transparent;
-    /* 移除 border-radius 和 box-shadow 属性 */
-    padding: 2rem;
+    padding: 1rem; /* 从2rem减小到1rem */
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem; /* 从2rem减小到1rem */
 }
 
 /* Controls */
@@ -84,13 +83,13 @@ main {
 .output-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem; /* 从2rem减小到1rem */
 }
 
 .terrain-viewer {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem; /* 从1.5rem减小到1rem */
 }
 
 .slice-container-wrapper {
@@ -145,7 +144,7 @@ main {
 }
 
 #color-picker-container {
-    padding: 1.5rem;
+    padding: 1rem; /* 从1.5rem减小到1rem */
     background: #f9f9f9;
     border-radius: 8px;
 }
@@ -177,7 +176,7 @@ main {
 
 .info-container {
     background: #f9f9f9;
-    padding: 1.5rem;
+    padding: 1rem; /* 从1.5rem减小到1rem */
     border-radius: 8px;
     overflow-wrap: break-word;
 }
