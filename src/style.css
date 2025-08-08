@@ -102,8 +102,8 @@ main {
 
 /* Output */
 .output-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
 }
 
