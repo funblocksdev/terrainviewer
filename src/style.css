@@ -94,3 +94,123 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+body { font-family: sans-serif; margin: 2em; background-color: #f4f4f9; color: #333; }
+h1 { color: #d9534f; }
+#coords-input { margin-bottom: 1em; }
+input { padding: 8px; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
+button { padding: 10px 15px; background-color: #5bc0de; color: white; border: none; border-radius: 4px; cursor: pointer; }
+button:hover { background-color: #31b0d5; }
+#output { margin-top: 1em; }
+h3 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 1.5em;}
+#chunk-address { font-family: monospace; color: #5cb85c; }
+#terrain-data, #decoded-data, #debug-info { font-family: monospace; white-space: pre-wrap; word-wrap: break-word; background-color: #eee; padding: 1em; border-radius: 4px; margin-top: 0.5em; }
+#error { color: #d9534f; }
+.block-type { display: inline-block; width: 20px; height: 20px; margin: 2px; text-align: center; line-height: 20px; font-size: 12px; }
+.air { background-color: #c8fffc; }
+.stone { background-color: #888888; color: white; }
+.water { background-color: #4d94ff; color: white; }
+.sand { background-color: #f0e68c; }
+.grass { background-color: #7cce6d; color: white; }
+.snow { background-color: #ffffff; border: 1px solid #ccc; }
+
+/* 新增样式用于3D立方体显示 */
+.slice-container { 
+    display: grid; 
+    grid-template-columns: 20px repeat(16, 20px); /* 增加一列用于显示z轴坐标标签 */
+    grid-template-rows: 20px repeat(16, 20px) 20px; /* 调整行高，第一行和最后一行用于坐标标签 */
+    gap: 1px; 
+    margin: 20px 0; 
+}
+.cube { 
+    width: 20px; 
+    height: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 10px; 
+    border: 1px solid #ccc; 
+}
+/* 修改controls类，使用flexbox布局 */
+.controls { 
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* 移除float，调整垂直滑块容器 */
+/* 修改垂直滑块样式，确保上下滑动 */
+.vertical-slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 340px;
+    margin: 0;
+    padding: 0;
+    order: 2;
+}
+
+/* 修改垂直滑块样式，调整方向 */
+.vertical-slider-container input[type="range"] {
+    writing-mode: bt-lr; /* 垂直方向：bottom-to-top */
+    -webkit-appearance: slider-vertical;
+    width: 20px;
+    height: 280px;
+    padding: 0;
+    margin: 10px 0;
+    /* 移除transform: rotate(180deg)，让0在底部，15在顶部 */
+}
+
+/* 调整slice-container样式 */
+.slice-container { 
+    display: grid; 
+    grid-template-columns: 20px repeat(16, 20px);
+    grid-template-rows: 20px repeat(16, 20px) 20px;
+    gap: 1px; 
+    margin: 0;
+}
+
+/* 添加颜色选择器容器样式 */
+.color-picker-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    min-width: 150px;
+}
+
+.color-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.color-picker-item label {
+    min-width: 60px;
+}
+
+.color-picker-item input[type="color"] {
+    width: 40px;
+    height: 30px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* 调整controls类以适应颜色选择器 */
+.controls { 
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.slice-container-wrapper {
+    display: flex;
+    gap: 20px;
+}

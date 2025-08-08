@@ -9,10 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dust/world": "https://pkg.pr.new/dustproject/dust/@dust/world@2b5a710",
     "dustkit": "https://pkg.pr.new/dustproject/dust/dustkit@2b5a710",
-    "@dust/world": "https://pkg.pr.new/dustproject/dust/@dust/world@2b5a710"
+    "viem": "^2.33.3"
   },
-
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^7.1.0"
