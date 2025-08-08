@@ -32,8 +32,8 @@ function packVec3([x, y, z]: [number, number, number]): bigint {
 }
 
 // --- Chunk Logic ---
-function voxelToChunkPos(p: Vec3): [number, number, number] {
-    const chunkCoords = p.scale(1 / CHUNK_WIDTH).floor();
+export function voxelToChunkPos(p: {x: number, y: number, z: number}): [number, number, number] {
+    const chunkCoords = new Vec3(p.x, p.y, p.z).scale(1 / CHUNK_WIDTH).floor();
     return [chunkCoords.x, chunkCoords.y, chunkCoords.z];
 }
 
@@ -49,6 +49,10 @@ interface Create3AddressOptions {
     from: Hex;
     salt: Hex;
     proxyInitCodeHash?: Hex;
+}
+
+export function chunkToVoxelPos(chunkCoord: [number, number, number]): [number, number, number] {
+    return [chunkCoord[0] * CHUNK_WIDTH, chunkCoord[1] * CHUNK_WIDTH, chunkCoord[2] * CHUNK_WIDTH];
 }
 
 function getCreate3Address_TS(opts: Create3AddressOptions): { finalAddress: Hex; proxyAddress: Hex } {

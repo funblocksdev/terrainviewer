@@ -47,8 +47,22 @@ main {
 
 #coords-input {
     display: flex;
-    gap: 1rem;
+    gap: 2rem; /* Increase gap between coordinate systems */
     align-items: center;
+}
+
+.coord-group {
+    display: flex;
+    gap: 0.5rem; /* Gap between labels and inputs */
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.coord-group span {
+    font-weight: 500;
+    margin-right: 0.5rem;
 }
 
 #coords-input label {
