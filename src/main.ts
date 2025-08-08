@@ -1,8 +1,11 @@
 import './style.css';
 import { getTerrainData, decodeTerrainHeader, chunkToVoxelPos, voxelToChunkPos, CHUNK_WIDTH } from './terrain';
-import { displaySlice, initializeColorPickers } from './ui';
+import { displaySlice, initializeColorPickers, displayPlayerEntityId } from './ui';
+import { connectDustClient } from "dustkit/internal";
+import { encodePlayer } from '@dust/world/internal';
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupPlayerEntityId();
     initializeCoordSync();
     const getTerrainButton = document.getElementById('get-terrain-button');
     if (getTerrainButton) {
@@ -16,6 +19,26 @@ document.addEventListener('DOMContentLoaded', () => {
     setupToggleArrow('toggle-decoded-header', 'decoded-data');
     setupToggleArrow('toggle-debug-info', 'debug-info');
 });
+
+const setupPlayerEntityId = async () => {
+    try {
+        console.log("Attempting to connect to Dust client...");
+        const dustClient = await connectDustClient();
+        console.log("Successfully connected to Dust client:", dustClient);
+
+        const { appContext } = dustClient;
+        const playerEntityId = encodePlayer(appContext.userAddress);
+        console.log("Player Entity ID:", playerEntityId);
+        
+        displayPlayerEntityId(playerEntityId);
+    } catch (error) {
+        console.error("Failed to get player entity ID:", error);
+        const errorElement = document.getElementById('error');
+        if(errorElement) {
+            errorElement.textContent = "Failed to get player entity ID. See console for details.";
+        }
+    }
+};
 
 function setupToggleArrow(arrowId: string, targetId: string) {
     const toggleArrow = document.getElementById(arrowId);
