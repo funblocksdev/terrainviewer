@@ -8,7 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 2rem; /* 添加内边距以保持页面边距 */
+    padding: 0rem; /* 添加内边距以保持页面边距 */
 }
 
 header h1 {
@@ -24,7 +24,7 @@ main {
     width: 500px;
     max-width: 480px;
     background: transparent;
-    padding: 1rem; /* 从2rem减小到1rem */
+    padding: 0rem; /* 从2rem减小到1rem */
     display: flex;
     flex-direction: column;
     gap: 1rem; /* 从2rem减小到1rem */
