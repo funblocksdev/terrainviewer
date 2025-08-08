@@ -47,7 +47,8 @@ main {
 
 #coords-input {
     display: flex;
-    gap: 2rem; /* Increase gap between coordinate systems */
+    flex-direction: column;
+    gap: 1rem;
     align-items: center;
 }
 
