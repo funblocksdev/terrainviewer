@@ -8,6 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "dustkit": "https://pkg.pr.new/dustproject/dust/dustkit@2b5a710",
+    "@dust/world": "https://pkg.pr.new/dustproject/dust/@dust/world@2b5a710"
+  },
+
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^7.1.0"
