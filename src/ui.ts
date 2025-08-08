@@ -84,7 +84,7 @@ export function initializeColorPickers() {
     container.appendChild(resetButton);
 }
 
-export function displaySlice(data: string, yValue: number) {
+export function displaySlice(data: string, yValue: number, highlight?: {x: number, y: number, z: number}) {
     const container = document.getElementById('slice-container');
     if (!container) return;
 
@@ -109,7 +109,12 @@ export function displaySlice(data: string, yValue: number) {
             const cube = document.createElement('div');
             cube.className = 'cube';
             cube.textContent = blockType.toString();
-            cube.style.backgroundColor = getBlockColor(blockType);
+            if (highlight && highlight.x === x && highlight.z === z && highlight.y === yValue) {
+                cube.style.backgroundColor = 'red'; // Highlight color
+                cube.style.border = '2px solid yellow';
+            } else {
+                cube.style.backgroundColor = getBlockColor(blockType);
+            }
             cube.style.gridColumn = `${x + 2}`;
             cube.style.gridRow = `${z + 2}`;
             container.appendChild(cube);

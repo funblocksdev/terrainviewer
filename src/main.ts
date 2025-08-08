@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCoordSync();
     const getTerrainButton = document.getElementById('get-terrain-button');
     if (getTerrainButton) {
-        getTerrainButton.addEventListener('click', handleFetchTerrain);
+        // Create a wrapper function for the event listener
+        getTerrainButton.addEventListener('click', () => handleFetchTerrain());
     }
     const getPlayerPositionButton = document.getElementById('get-player-position-button');
     if (getPlayerPositionButton) {
@@ -44,6 +45,7 @@ async function getPlayerPosition() {
 
                 // Manually trigger input event to update chunk coordinates
                 xInput.dispatchEvent(new Event('input'));
+                handleFetchTerrain(true);
             }
         }
     } catch (error) {
@@ -119,13 +121,13 @@ function initializeCoordSync() {
     const x = parseInt(inputs.x.value) || 0;
     const y = parseInt(inputs.y.value) || 0;
     const z = parseInt(inputs.z.value) || 0;
-    const [chunkX, chunkY, chunkZ] = voxelToChunkPos({x, y, z});
+    const [chunkX, chunkY, chunkZ] = chunkToVoxelPos([x, y, z]);
     inputs.chunkX.value = chunkX.toString();
     inputs.chunkY.value = chunkY.toString();
     inputs.chunkZ.value = chunkZ.toString();
 }
 
-async function handleFetchTerrain() {
+async function handleFetchTerrain(isPlayerPosition = false) {
     const x = parseInt((document.getElementById('x') as HTMLInputElement).value);
     const y = parseInt((document.getElementById('y') as HTMLInputElement).value);
     const z = parseInt((document.getElementById('z') as HTMLInputElement).value);
@@ -154,14 +156,15 @@ async function handleFetchTerrain() {
             <div id="raw-data" style="display:none;">${data}</div>
         `;
 
-        setupSliceControls(y, data);
+        // Pass the y coordinate for highlighting
+        setupSliceControls(y, data, isPlayerPosition ? {x: x % 16, y: y, z: z % 16} : undefined);
 
     } catch (err: any) {
         document.getElementById('error')!.textContent = err.message;
     }
 }
 
-function setupSliceControls(y: number, data: string) {
+function setupSliceControls(y: number, data: string, highlight?: {x: number, y: number, z: number}) {
     const chunkY = Math.floor(y / CHUNK_WIDTH);
     const minY = chunkY * CHUNK_WIDTH;
     const maxY = (chunkY + 1) * CHUNK_WIDTH - 1;
@@ -171,16 +174,17 @@ function setupSliceControls(y: number, data: string) {
 
     ySlider.min = minY.toString();
     ySlider.max = maxY.toString();
-    ySlider.value = minY.toString();
-    yLabel.textContent = `Y: ${minY}`;
+    ySlider.value = y.toString();
+    yLabel.textContent = `Y: ${y}`;
 
-    displaySlice(data, minY);
+    displaySlice(data, y, highlight);
 
     ySlider.addEventListener('input', () => {
         const yValue = parseInt(ySlider.value);
         yLabel.textContent = `Y: ${yValue}`;
-        displaySlice(data, yValue);
+        displaySlice(data, yValue, highlight);
     });
+
 }
 
 function clearOutput() {
