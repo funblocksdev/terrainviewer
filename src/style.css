@@ -174,16 +174,32 @@ main {
 
 #color-picker-container h4 {
     margin-top: 0;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    margin-bottom: 0.5rem; /* 从1rem减小到0.5rem */
+    font-size: 1.2rem; /* 从1.2rem减小到1rem */
     grid-column: span 2;
 }
 
 .color-picker-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 0.5rem;
+    gap: 8px; /* 从10px减小到8px */
+    margin-bottom: 0.25rem; /* 从0.5rem减小到0.25rem */
+}
+
+#color-picker-container button {
+    grid-column: span 2;
+    justify-self: start;
+    padding: 0.25rem 0.5rem; /* 减小按钮内边距 */
+    font-size: 0.9rem; /* 稍微减小字体大小 */
+}
+
+#color-picker-container {
+    padding: 0.75rem; /* 从1rem减小到0.75rem */
+    background: #f9f9f9;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem; /* 从1rem减小到0.5rem */
 }
 
 .color-picker-item label {
