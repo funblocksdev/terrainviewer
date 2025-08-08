@@ -40,8 +40,14 @@ main {
     border-radius: 8px;
 }
 
+/* Controls */
 #coords-input {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
     flex-direction: column;
     gap: 0rem;
     align-items: center;
