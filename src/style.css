@@ -22,7 +22,7 @@ header h1 {
 
 main {
     width: 500px;
-    max-width: 500px;
+    max-width: 480px; /* 从500px改为480px */
     background: transparent;
     /* 移除 border-radius 和 box-shadow 属性 */
     padding: 2rem;
@@ -104,7 +104,7 @@ main {
     grid-template-columns: 30px repeat(16, 25px);
     grid-template-rows: 30px repeat(16, 25px);
     gap: 2px;
-    background: #eee;
+    background: #f9f9f9; /* 从 #eee 改为 #f9f9f9 以匹配其他组件 */
     padding: 10px;
     border-radius: 8px;
 }
