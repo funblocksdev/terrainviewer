@@ -146,16 +146,3 @@ export function displaySlice(data: string, yValue: number) {
     container.appendChild(rightBottomLabel);
 }
 
-export const displayPlayerEntityId = (entityId: string) => {
-    const entityIdElement = document.createElement("div");
-    entityIdElement.id = "player-entity-id";
-    entityIdElement.textContent = `Player Entity ID: ${entityId}`;
-    entityIdElement.style.position = "fixed";
-    entityIdElement.style.bottom = "10px";
-    entityIdElement.style.left = "10px";
-    entityIdElement.style.color = "white";
-    entityIdElement.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-    entityIdElement.style.padding = "5px 10px";
-    entityIdElement.style.borderRadius = "5px";
-    document.body.appendChild(entityIdElement);
-};

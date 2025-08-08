@@ -1,15 +1,18 @@
 import './style.css';
 import { getTerrainData, decodeTerrainHeader, chunkToVoxelPos, voxelToChunkPos, CHUNK_WIDTH } from './terrain';
-import { displaySlice, initializeColorPickers, displayPlayerEntityId } from './ui';
+import { displaySlice, initializeColorPickers } from './ui';
 import { connectDustClient } from "dustkit/internal";
 import { encodePlayer } from '@dust/world/internal';
 
 document.addEventListener('DOMContentLoaded', () => {
-    setupPlayerEntityId();
     initializeCoordSync();
     const getTerrainButton = document.getElementById('get-terrain-button');
     if (getTerrainButton) {
         getTerrainButton.addEventListener('click', handleFetchTerrain);
+    }
+    const getPlayerPositionButton = document.getElementById('get-player-position-button');
+    if (getPlayerPositionButton) {
+        getPlayerPositionButton.addEventListener('click', getPlayerPosition);
     }
     initializeColorPickers();
     
@@ -20,25 +23,37 @@ document.addEventListener('DOMContentLoaded', () => {
     setupToggleArrow('toggle-debug-info', 'debug-info');
 });
 
-const setupPlayerEntityId = async () => {
+async function getPlayerPosition() {
     try {
-        console.log("Attempting to connect to Dust client...");
-        const dustClient = await connectDustClient();
-        console.log("Successfully connected to Dust client:", dustClient);
-
-        const { appContext } = dustClient;
+        const { appContext, provider } = await connectDustClient();
         const playerEntityId = encodePlayer(appContext.userAddress);
-        console.log("Player Entity ID:", playerEntityId);
-        
-        displayPlayerEntityId(playerEntityId);
+        const position = await provider.request({
+            method: "getPlayerPosition",
+            params: {
+                entity: playerEntityId,
+            },
+        });
+        if (position) {
+            const xInput = document.getElementById('x') as HTMLInputElement;
+            const yInput = document.getElementById('y') as HTMLInputElement;
+            const zInput = document.getElementById('z') as HTMLInputElement;
+            if (xInput && yInput && zInput) {
+                xInput.value = position.x.toString();
+                yInput.value = position.y.toString();
+                zInput.value = position.z.toString();
+
+                // Manually trigger input event to update chunk coordinates
+                xInput.dispatchEvent(new Event('input'));
+            }
+        }
     } catch (error) {
-        console.error("Failed to get player entity ID:", error);
+        console.error("Failed to get player position:", error);
         const errorElement = document.getElementById('error');
         if(errorElement) {
-            errorElement.textContent = "Failed to get player entity ID. See console for details.";
+            errorElement.textContent = "Failed to get player position. See console for details.";
         }
     }
-};
+}
 
 function setupToggleArrow(arrowId: string, targetId: string) {
     const toggleArrow = document.getElementById(arrowId);

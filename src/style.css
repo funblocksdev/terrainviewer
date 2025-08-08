@@ -63,8 +63,17 @@ main {
     transition: border-color 0.2s;
 }
 
-#get-terrain-button {
-    padding: 0.5rem 1rem; /* 垂直内边距从0.75rem减小到0.5rem */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+#get-terrain-button,
+#get-player-position-button {
+    padding: 0.5rem 1rem;
     background-color: #5bc0de;
     color: white;
     border: none;
@@ -73,9 +82,12 @@ main {
     font-size: 1rem;
     font-weight: 500;
     transition: background-color 0.2s;
+    flex: 1;
+    max-width: 200px;
 }
 
-#get-terrain-button:hover {
+#get-terrain-button:hover,
+#get-player-position-button:hover {
     background-color: #31b0d5;
 }
 
