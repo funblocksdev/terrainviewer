@@ -105,7 +105,7 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
                     const isBoundary = x === 0 || x === CHUNK_WIDTH - 1 || y === 0 || y === CHUNK_WIDTH - 1 || z === 0 || z === CHUNK_WIDTH - 1;
                     if (blockType === 1 && isBoundary) { // An air block on the boundary
                         blocks.push({
-                            objectTypeId: 2, // Set it to be a water block
+                            objectTypeId: 110,
                             x: startX + x,
                             y: startY + y,
                             z: startZ + z,
