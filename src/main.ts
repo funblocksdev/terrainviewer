@@ -222,7 +222,7 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
                 blocks: blocks,
                 options: {
                     showBlocksToMine: true,
-                    showBlocksToBuild: true,
+                    showBlocksToBuild: false,
                 }
             },
         });
