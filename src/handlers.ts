@@ -104,7 +104,7 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
                     // If block is air (type 1), display it as water (type 2).
                     if (blockType === 1) { // An air block
                         blocks.push({
-                            objectTypeId: 3,
+                            objectTypeId: 110,
                             x: startX + x,
                             y: startY + y,
                             z: startZ + z,
