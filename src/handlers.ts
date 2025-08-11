@@ -101,10 +101,10 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
 
                     const blockType = parseInt(byte, 16);
 
-                    // If block is not air (type 1), display it as air.
-                    if (blockType > 1) { // A non-air, non-empty block
+                    // If block is air (type 1), display it as water (type 2).
+                    if (blockType === 1) { // An air block
                         blocks.push({
-                            objectTypeId: 1, // Set it to be an air block
+                            objectTypeId: 99999,
                             x: startX + x,
                             y: startY + y,
                             z: startZ + z,
