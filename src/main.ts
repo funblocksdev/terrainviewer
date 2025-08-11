@@ -178,7 +178,6 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
 
         const { provider } = await connectDustClient();
         const blocks = [];
- 
         const [startX, startY, startZ] = chunkToVoxelPos([chunkX, chunkY, chunkZ]);
 
         // The data is laid out X-major, then Y, then Z.
@@ -222,7 +221,7 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
             params: {
                 blocks: blocks,
                 options: {
-                    showBlocksToMine: false,
+                    showBlocksToMine: true,
                     showBlocksToBuild: true,
                 }
             },
