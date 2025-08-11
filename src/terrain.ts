@@ -1,35 +1,12 @@
-import { getCreate2Address, getCreateAddress, pad, toBytes, toHex } from 'viem';
+import { toHex } from 'viem';
 type Hex = `0x${string}`
-import { client, worldAddress, DEFAULT_CREATE3_PROXY_INITCODE_HASH } from './viem';
+import { client, worldAddress } from './viem';
+import { getChunkSalt, getCreate3Address_TS } from './address';
+
 
 export const CHUNK_WIDTH = 16;
 
-// --- Vector Math ---
-class Vec3 {
-    x: number;
-    y: number;
-    z: number;
-    
-    constructor(x: number, y: number, z: number) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-    
-    scale(n: number): Vec3 {
-        return new Vec3(this.x * n, this.y * n, this.z * n);
-    }
-    floor(): Vec3 {
-        return new Vec3(Math.floor(this.x), Math.floor(this.y), Math.floor(this.z));
-    }
-}
-
-function packVec3([x, y, z]: [number, number, number]): bigint {
-    const ux = BigInt(x >>> 0);
-    const uy = BigInt(y >>> 0);
-    const uz = BigInt(z >>> 0);
-    return (ux << 64n) | (uy << 32n) | uz;
-}
+import { Vec3 } from './math';
 
 // --- Chunk Logic ---
 export function voxelToChunkPos(p: {x: number, y: number, z: number}): [number, number, number] {
@@ -37,32 +14,8 @@ export function voxelToChunkPos(p: {x: number, y: number, z: number}): [number, 
     return [chunkCoords.x, chunkCoords.y, chunkCoords.z];
 }
 
-function getChunkSalt(coord: [number, number, number]): `0x${string}` {
-    const packed = packVec3(coord);
-    const packedBytes = toBytes(packed, { size: 12 });
-    const padded = pad(packedBytes, { size: 32 });
-    return toHex(padded) as `0x${string}`;
-}
-
-// --- Create3 Address Logic ---
-interface Create3AddressOptions {
-    from: Hex;
-    salt: Hex;
-    proxyInitCodeHash?: Hex;
-}
-
 export function chunkToVoxelPos(chunkCoord: [number, number, number]): [number, number, number] {
     return [chunkCoord[0] * CHUNK_WIDTH, chunkCoord[1] * CHUNK_WIDTH, chunkCoord[2] * CHUNK_WIDTH];
-}
-
-function getCreate3Address_TS(opts: Create3AddressOptions): { finalAddress: Hex; proxyAddress: Hex } {
-    const proxyAddress = getCreate2Address({
-        from: opts.from,
-        salt: opts.salt,
-        bytecodeHash: opts.proxyInitCodeHash ?? DEFAULT_CREATE3_PROXY_INITCODE_HASH,
-    });
-    const finalAddress = getCreateAddress({ from: proxyAddress, nonce: 1n });
-    return { finalAddress, proxyAddress };
 }
 
 export async function getTerrainData(x: number, y: number, z: number): Promise<{ finalAddress: Hex, terrainData: Hex, debugInfo: string[] }> {
