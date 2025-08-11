@@ -18,9 +18,10 @@ export async function getPlayerPosition() {
             const yInput = document.getElementById('y') as HTMLInputElement;
             const zInput = document.getElementById('z') as HTMLInputElement;
             if (xInput && yInput && zInput) {
-                xInput.value = position.x.toString();
-                yInput.value = position.y.toString();
-                zInput.value = position.z.toString();
+                // Convert positions to integers before setting them
+                xInput.value = Math.floor(position.x).toString();
+                yInput.value = Math.floor(position.y).toString();
+                zInput.value = Math.floor(position.z).toString();
 
                 // Manually trigger input event to update chunk coordinates
                 xInput.dispatchEvent(new Event('input'));
