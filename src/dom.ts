@@ -16,7 +16,11 @@ export function initializeApp() {
         const blueprintToggle = document.getElementById('blueprint-toggle') as HTMLInputElement;
         if (blueprintToggle) {
             blueprintToggle.addEventListener('change', () => {
-                if (!blueprintToggle.checked) {
+                if (blueprintToggle.checked) {
+                    // If toggled on, re-fetch the terrain to show the blueprint
+                    handleFetchTerrain();
+                } else {
+                    // If toggled off, clear the blueprint
                     clearBlueprint();
                 }
             });
