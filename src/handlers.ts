@@ -68,8 +68,11 @@ export async function handleFetchTerrain(isPlayerPosition = false) {
         // Pass the y coordinate for highlighting
         setupSliceControls(y, data, isPlayerPosition ? {x: x % 16, y: y, z: z % 16} : undefined);
 
-        const chunkCoord = voxelToChunkPos({x, y, z});
-        setBlueprintOfChunk(data, chunkCoord[0], chunkCoord[1], chunkCoord[2]);
+        const blueprintToggle = document.getElementById('blueprint-toggle') as HTMLInputElement;
+        if (blueprintToggle && blueprintToggle.checked) {
+            const chunkCoord = voxelToChunkPos({x, y, z});
+            setBlueprintOfChunk(data, chunkCoord[0], chunkCoord[1], chunkCoord[2]);
+        }
 
     } catch (err: any) {
         document.getElementById('error')!.textContent = err.message;
@@ -134,3 +137,26 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
         }
     }
 }
+
+export async function clearBlueprint() {
+    try {
+        const { provider } = await connectDustClient();
+        await provider.request({
+            method: "setBlueprint",
+            params: {
+                blocks: [],
+                options: {
+                    showBlocksToMine: true,
+                    showBlocksToBuild: true,
+                }
+            },
+        });
+    } catch (error) {
+        console.error("Failed to clear blueprint:", error);
+        const errorElement = document.getElementById('error');
+        if(errorElement) {
+            errorElement.textContent = "Failed to clear blueprint. See console for details.";
+        }
+    }
+}
+

@@ -1,6 +1,6 @@
 import { voxelToChunkPos, chunkToVoxelPos, CHUNK_WIDTH } from './terrain';
 import { displaySlice, initializeColorPickers } from './ui';
-import { handleFetchTerrain, getPlayerPosition } from './handlers';
+import { handleFetchTerrain, getPlayerPosition, clearBlueprint } from './handlers';
 
 export function initializeApp() {
     document.addEventListener('DOMContentLoaded', () => {
@@ -13,6 +13,15 @@ export function initializeApp() {
         if (getPlayerPositionButton) {
             getPlayerPositionButton.addEventListener('click', getPlayerPosition);
         }
+        const blueprintToggle = document.getElementById('blueprint-toggle') as HTMLInputElement;
+        if (blueprintToggle) {
+            blueprintToggle.addEventListener('change', () => {
+                if (!blueprintToggle.checked) {
+                    clearBlueprint();
+                }
+            });
+        }
+
         initializeColorPickers();
         
         // Add event listener for the toggle arrows
