@@ -121,7 +121,7 @@ function initializeCoordSync() {
     const x = parseInt(inputs.x.value) || 0;
     const y = parseInt(inputs.y.value) || 0;
     const z = parseInt(inputs.z.value) || 0;
-    const [chunkX, chunkY, chunkZ] = voxelToChunkPos([x, y, z]);
+    const [chunkX, chunkY, chunkZ] = voxelToChunkPos({x, y, z});
     inputs.chunkX.value = chunkX.toString();
     inputs.chunkY.value = chunkY.toString();
     inputs.chunkZ.value = chunkZ.toString();
@@ -178,6 +178,7 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
 
         const { provider } = await connectDustClient();
         const blocks = [];
+ 
         const [startX, startY, startZ] = chunkToVoxelPos([chunkX, chunkY, chunkZ]);
 
         // The data is laid out X-major, then Y, then Z.
