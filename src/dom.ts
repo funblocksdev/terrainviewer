@@ -111,7 +111,7 @@ export function setupSliceControls(y: number, data: string, highlight?: {x: numb
     const minY = chunkY * CHUNK_WIDTH;
     const maxY = (chunkY + 1) * CHUNK_WIDTH - 1;
 
-    const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+    let ySlider = document.getElementById('y-slider') as HTMLInputElement;
     const yLabel = document.getElementById('y-label')!;
 
     ySlider.min = minY.toString();
@@ -120,6 +120,11 @@ export function setupSliceControls(y: number, data: string, highlight?: {x: numb
     yLabel.textContent = `Y: ${y}`;
 
     displaySlice(data, y, highlight);
+
+    // To prevent adding multiple event listeners, we replace the slider with a clone of itself.
+    const newSlider = ySlider.cloneNode(true) as HTMLInputElement;
+    ySlider.parentNode!.replaceChild(newSlider, ySlider);
+    ySlider = newSlider;
 
     ySlider.addEventListener('input', () => {
         const yValue = parseInt(ySlider.value);
