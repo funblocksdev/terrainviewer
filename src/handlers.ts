@@ -101,11 +101,22 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
 
                     const blockType = parseInt(byte, 16);
 
-                    // If block is air (type 1) and on the boundary, display it as water (type 2).
-                    const isBoundary = x === 0 || x === CHUNK_WIDTH - 1 || y === 0 || y === CHUNK_WIDTH - 1 || z === 0 || z === CHUNK_WIDTH - 1;
-                    if (blockType === 1 && isBoundary) { // An air block on the boundary
+                    // Rule 1: If the block is NOT air, represent it as air in the blueprint.
+                    if (blockType > 1) {
                         blocks.push({
-                            objectTypeId: 110,
+                            objectTypeId: 1, // show as air
+                            x: startX + x,
+                            y: startY + y,
+                            z: startZ + z,
+                            orientation: 0,
+                        });
+                    }
+
+                    // Rule 2: If the block IS air AND it's on the boundary, show it as object 110.
+                    const isBoundary = x === 0 || x === CHUNK_WIDTH - 1 || y === 0 || y === CHUNK_WIDTH - 1 || z === 0 || z === CHUNK_WIDTH - 1;
+                    if (blockType === 1 && isBoundary) {
+                        blocks.push({
+                            objectTypeId: 110, // show as 110
                             x: startX + x,
                             y: startY + y,
                             z: startZ + z,
