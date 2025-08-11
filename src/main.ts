@@ -161,6 +161,11 @@ async function handleFetchTerrain(isPlayerPosition = false) {
 
     } catch (err: any) {
         document.getElementById('error')!.textContent = err.message;
+        // Display message in slice container when there's no data
+        const sliceContainer = document.getElementById('slice-container');
+        if (sliceContainer) {
+            sliceContainer.innerHTML = '<div class="no-data-message">Chunk not explored</div>';
+        }
     }
 }
 
