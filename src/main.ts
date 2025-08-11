@@ -174,8 +174,6 @@ async function handleFetchTerrain(isPlayerPosition = false) {
 
 async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number, chunkZ: number) {
     try {
-        console.log("Attempting to set blueprint for chunk:", chunkX, chunkY, chunkZ);
-
         const { provider } = await connectDustClient();
         const blocks = [];
         const [startX, startY, startZ] = chunkToVoxelPos([chunkX, chunkY, chunkZ]);
@@ -191,10 +189,10 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
 
                     const blockType = parseInt(byte, 16);
 
-                    // We don't draw air (type 1) or empty (type 0) blocks to avoid clutter.
-                    if (blockType > 1) {
+                    // If block is not air (type 1), display it as air.
+                    if (blockType > 1) { // A non-air, non-empty block
                         blocks.push({
-                            objectTypeId: blockType,
+                            objectTypeId: 1, // Set it to be an air block
                             x: startX + x,
                             y: startY + y,
                             z: startZ + z,
@@ -205,15 +203,8 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
             }
         }
 
-        console.log(`Found ${blocks.length} non-air blocks to create blueprint.`);
-
         if (blocks.length === 0) {
-            console.log("No blocks to draw for blueprint (all air/empty).");
             return;
-        }
-
-        if (blocks.length > 0) {
-            console.log("Sample blocks:", blocks.slice(0, 5));
         }
 
         await provider.request({
@@ -222,11 +213,10 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
                 blocks: blocks,
                 options: {
                     showBlocksToMine: true,
-                    showBlocksToBuild: false,
+                    showBlocksToBuild: true,
                 }
             },
         });
-        console.log("Successfully sent setBlueprint request.");
     } catch (error) {
         console.error("Failed to set blueprint:", error);
         const errorElement = document.getElementById('error');
