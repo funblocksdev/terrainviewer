@@ -121,7 +121,7 @@ function initializeCoordSync() {
     const x = parseInt(inputs.x.value) || 0;
     const y = parseInt(inputs.y.value) || 0;
     const z = parseInt(inputs.z.value) || 0;
-    const [chunkX, chunkY, chunkZ] = voxelToChunkPos({x, y, z});
+    const [chunkX, chunkY, chunkZ] = voxelToChunkPos([x, y, z]);
     inputs.chunkX.value = chunkX.toString();
     inputs.chunkY.value = chunkY.toString();
     inputs.chunkZ.value = chunkZ.toString();
@@ -174,6 +174,8 @@ async function handleFetchTerrain(isPlayerPosition = false) {
 
 async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number, chunkZ: number) {
     try {
+        console.log("Attempting to set blueprint for chunk:", chunkX, chunkY, chunkZ);
+
         const { provider } = await connectDustClient();
         const blocks = [];
         const [startX, startY, startZ] = chunkToVoxelPos([chunkX, chunkY, chunkZ]);
@@ -203,9 +205,15 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
             }
         }
 
+        console.log(`Found ${blocks.length} non-air blocks to create blueprint.`);
+
         if (blocks.length === 0) {
             console.log("No blocks to draw for blueprint (all air/empty).");
             return;
+        }
+
+        if (blocks.length > 0) {
+            console.log("Sample blocks:", blocks.slice(0, 5));
         }
 
         await provider.request({
@@ -218,6 +226,7 @@ async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number,
                 }
             },
         });
+        console.log("Successfully sent setBlueprint request.");
     } catch (error) {
         console.error("Failed to set blueprint:", error);
         const errorElement = document.getElementById('error');
@@ -256,4 +265,4 @@ function clearOutput() {
     document.getElementById('decoded-data')!.innerHTML = 'Decoding...';
     document.getElementById('debug-info')!.textContent = '';
     document.getElementById('error')!.textContent = '';
-} 
+}
