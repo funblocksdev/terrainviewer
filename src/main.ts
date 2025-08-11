@@ -121,7 +121,7 @@ function initializeCoordSync() {
     const x = parseInt(inputs.x.value) || 0;
     const y = parseInt(inputs.y.value) || 0;
     const z = parseInt(inputs.z.value) || 0;
-    const [chunkX, chunkY, chunkZ] = chunkToVoxelPos([x, y, z]);
+    const [chunkX, chunkY, chunkZ] = voxelToChunkPos({x, y, z});
     inputs.chunkX.value = chunkX.toString();
     inputs.chunkY.value = chunkY.toString();
     inputs.chunkZ.value = chunkZ.toString();
@@ -159,12 +159,70 @@ async function handleFetchTerrain(isPlayerPosition = false) {
         // Pass the y coordinate for highlighting
         setupSliceControls(y, data, isPlayerPosition ? {x: x % 16, y: y, z: z % 16} : undefined);
 
+        const chunkCoord = voxelToChunkPos({x, y, z});
+        setBlueprintOfChunk(data, chunkCoord[0], chunkCoord[1], chunkCoord[2]);
+
     } catch (err: any) {
         document.getElementById('error')!.textContent = err.message;
         // Display message in slice container when there's no data
         const sliceContainer = document.getElementById('slice-container');
         if (sliceContainer) {
             sliceContainer.innerHTML = '<div class="no-data-message">Chunk not explored</div>';
+        }
+    }
+}
+
+async function setBlueprintOfChunk(data: string, chunkX: number, chunkY: number, chunkZ: number) {
+    try {
+        const { provider } = await connectDustClient();
+        const blocks = [];
+        const [startX, startY, startZ] = chunkToVoxelPos([chunkX, chunkY, chunkZ]);
+
+        // The data is laid out X-major, then Y, then Z.
+        // Index = 4 (header) + x*16*16 + y*16 + z
+        for (let x = 0; x < CHUNK_WIDTH; x++) {
+            for (let y = 0; y < CHUNK_WIDTH; y++) {
+                for (let z = 0; z < CHUNK_WIDTH; z++) {
+                    const index = 4 + x * CHUNK_WIDTH * CHUNK_WIDTH + y * CHUNK_WIDTH + z;
+                    const byte = data.substring(index * 2, index * 2 + 2);
+                    if (byte === '') continue; // Avoid errors on incomplete data
+
+                    const blockType = parseInt(byte, 16);
+
+                    // We don't draw air (type 1) or empty (type 0) blocks to avoid clutter.
+                    if (blockType > 1) {
+                        blocks.push({
+                            objectTypeId: blockType,
+                            x: startX + x,
+                            y: startY + y,
+                            z: startZ + z,
+                            orientation: 0,
+                        });
+                    }
+                }
+            }
+        }
+
+        if (blocks.length === 0) {
+            console.log("No blocks to draw for blueprint (all air/empty).");
+            return;
+        }
+
+        await provider.request({
+            method: "setBlueprint",
+            params: {
+                blocks: blocks,
+                options: {
+                    showBlocksToMine: false,
+                    showBlocksToBuild: true,
+                }
+            },
+        });
+    } catch (error) {
+        console.error("Failed to set blueprint:", error);
+        const errorElement = document.getElementById('error');
+        if(errorElement) {
+            errorElement.textContent = "Failed to set blueprint. See console for details.";
         }
     }
 }
@@ -198,4 +256,4 @@ function clearOutput() {
     document.getElementById('decoded-data')!.innerHTML = 'Decoding...';
     document.getElementById('debug-info')!.textContent = '';
     document.getElementById('error')!.textContent = '';
-}
+} 
