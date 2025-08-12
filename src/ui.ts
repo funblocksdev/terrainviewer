@@ -100,6 +100,13 @@ export function displaySlice(data: string, yValue: number, highlight?: {x: numbe
     const chunkZ = Math.floor(userZ / 16) * 16;
     const relativeY = ((yValue % 16) + 16) % 16;
 
+    // Add debug info for highlight
+    if (highlight) {
+        console.log(`Highlight requested at: x=${highlight.x}, y=${highlight.y}, z=${highlight.z}`);
+        console.log(`Current slice yValue: ${yValue}`);
+        console.log(`Relative Y: ${relativeY}`);
+    }
+
     for (let z = 0; z < 16; z++) {
         for (let x = 0; x < 16; x++) {
             const index = 4 + x * 256 + relativeY * 16 + z;
@@ -109,12 +116,20 @@ export function displaySlice(data: string, yValue: number, highlight?: {x: numbe
             const cube = document.createElement('div');
             cube.className = 'cube';
             cube.textContent = blockType.toString();
-            if (highlight && highlight.x === x && highlight.z === z && highlight.y === yValue) {
+            
+            // Check if this cube should be highlighted
+            // Use relativeY for comparison since that's what we use to access the data
+            if (highlight && 
+                highlight.x === x && 
+                highlight.z === z && 
+                highlight.y === relativeY) {
+                console.log(`Highlighting cube at x=${x}, z=${z}`);
                 cube.style.backgroundColor = 'red'; // Highlight color
                 cube.style.border = '2px solid yellow';
             } else {
                 cube.style.backgroundColor = getBlockColor(blockType);
             }
+            
             cube.style.gridColumn = `${x + 2}`;
             cube.style.gridRow = `${z + 2}`;
             container.appendChild(cube);

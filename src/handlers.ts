@@ -67,7 +67,15 @@ export async function handleFetchTerrain(isPlayerPosition = false) {
         `;
 
         // Pass the y coordinate for highlighting
-        setupSliceControls(y, data, isPlayerPosition ? {x: x % 16, y: y, z: z % 16} : undefined);
+        // Calculate relative coordinates within the chunk
+        const chunkX = Math.floor(x / 16) * 16;
+        const chunkZ = Math.floor(z / 16) * 16;
+        const relativeX = x - chunkX;
+        const relativeZ = z - chunkZ;
+        
+        const highlight = isPlayerPosition ? {x: relativeX, y: y, z: relativeZ} : undefined;
+        console.log("Player position highlight:", highlight);
+        setupSliceControls(y, data, highlight);
 
         const blueprintToggle = document.getElementById('blueprint-toggle') as HTMLInputElement;
         if (blueprintToggle && blueprintToggle.checked) {
