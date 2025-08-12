@@ -118,11 +118,11 @@ export function displaySlice(data: string, yValue: number, highlight?: {x: numbe
             cube.textContent = blockType.toString();
             
             // Check if this cube should be highlighted
-            // Use relativeY for comparison since that's what we use to access the data
+            // Use yValue for comparison since that's the actual Y coordinate we want to highlight
             if (highlight && 
                 highlight.x === x && 
                 highlight.z === z && 
-                highlight.y === relativeY) {
+                highlight.y === yValue) {
                 console.log(`Highlighting cube at x=${x}, z=${z}`);
                 cube.style.backgroundColor = 'red'; // Highlight color
                 cube.style.border = '2px solid yellow';
