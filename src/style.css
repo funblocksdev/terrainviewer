@@ -175,13 +175,15 @@ main {
     cursor: pointer;
 }
 
+/* 保留并修改了这个样式块，删除了另外两个重复的定义 */
 #color-picker-container {
-    padding: 1rem;
+    padding: 0.75rem;
     background: #f9f9f9;
     border-radius: 8px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    row-gap: 0.1rem;
+    column-gap: 2rem; /* 使用更合理的值 */
 }
 
 #color-picker-container h4 {
@@ -194,15 +196,8 @@ main {
 .color-picker-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px; /* 统一间距 */
     margin-bottom: 0.25rem;
-}
-
-.color-picker-item label {
-    flex: 0 0 120px; /* 不增长不收缩，基础宽度120px */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 #color-picker-container button {
@@ -210,16 +205,6 @@ main {
     justify-self: start;
     padding: 0.25rem 0.5rem; /* 减小按钮内边距 */
     font-size: 0.9rem; /* 稍微减小字体大小 */
-}
-
-#color-picker-container {
-    padding: 0.75rem;
-    background: #f9f9f9;
-    border-radius: 8px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 0.1rem;
-    column-gap: 5rem;
 }
 
 #custom-color-container {
