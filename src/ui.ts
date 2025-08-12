@@ -148,7 +148,7 @@ export function initializeColorPickers() {
     colorInput.style.marginBottom = '15px';
     const addButton = document.createElement('button');
     addButton.textContent = '+';
-    addButton.style.marginLeft = 'auto';  // Changed from marginRight to marginLeft: auto
+    addButton.style.marginLeft = '5px';  // 将 'auto' 改为 '5px' 以减少距离
     addButton.addEventListener('click', () => {
         const blockId = parseInt((addCustomColorRow.querySelector('#new-block-id') as HTMLSelectElement).value);
         const color = (addCustomColorRow.querySelector('#new-color-picker') as HTMLInputElement).value;
