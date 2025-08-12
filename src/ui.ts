@@ -118,7 +118,7 @@ export function initializeColorPickers() {
     const blockSelect = document.createElement('select');
     blockSelect.id = 'new-block-id';
     blockSelect.style.marginRight = '10px';
-    blockSelect.style.width = '120px';
+    blockSelect.style.width = '112px';  // 修改从120px到80px
     
     // Add default option
     const defaultOption = document.createElement('option');
