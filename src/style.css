@@ -169,7 +169,9 @@ main {
 
 .vertical-slider-container input[type="range"] {
     writing-mode: bt-lr;
-    -webkit-appearance: slider-vertical;
+    -webkit-appearance: slider-vertical; /* Safari/Chrome */
+    -moz-appearance: slider-vertical;    /* Firefox */
+    appearance: slider-vertical;         /* 标准属性 */
     width: 10px;
     height: 350px;
     cursor: pointer;
