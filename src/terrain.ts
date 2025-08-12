@@ -43,7 +43,7 @@ export async function getTerrainData(x: number, y: number, z: number): Promise<{
     return { finalAddress, terrainData, debugInfo };
 }
 
-export function decodeTerrainHeader(hexData: Hex): { version: number, biome: number, surface: number, data: string } {
+export function decodeTerrainHeader(hexData: Hex): { version: number, biome: number, surface: boolean, data: string } {
     const data = hexData.substring(2);
     const versionHex = data.substring(0, 4);
     const version = parseInt(versionHex, 16);
@@ -54,7 +54,7 @@ export function decodeTerrainHeader(hexData: Hex): { version: number, biome: num
     const biomeHex = data.substring(4, 6);
     const biome = parseInt(biomeHex, 16);
     const surfaceHex = data.substring(6, 8);
-    const surface = parseInt(surfaceHex, 16);
+    const surface = parseInt(surfaceHex, 16) !== 0;
 
     return { version, biome, surface, data };
 }

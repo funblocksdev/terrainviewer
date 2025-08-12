@@ -62,7 +62,7 @@ export async function handleFetchTerrain(isPlayerPosition = false) {
         decodedDataEl.innerHTML = `
             Version: ${version}<br>
             Biome: ${biome}<br>
-            Surface: ${surface}<br>
+            Surface: ${surface ? 'true' : 'false'}<br>
             <div id="raw-data" style="display:none;">${data}</div>
         `;
 
