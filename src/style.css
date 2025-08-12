@@ -194,8 +194,15 @@ main {
 .color-picker-item {
     display: flex;
     align-items: center;
-    gap: 8px; /* 从10px减小到8px */
-    margin-bottom: 0.25rem; /* 从0.5rem减小到0.25rem */
+    gap: 8px;
+    margin-bottom: 0.25rem;
+}
+
+.color-picker-item label {
+    flex: 0 0 120px; /* 不增长不收缩，基础宽度120px */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #color-picker-container button {
@@ -224,6 +231,8 @@ main {
 
 .color-picker-item label {
     flex: 1;
+    width: 100px; /* 或者您想要的固定宽度 */
+    display: inline-block;
 }
 
 .color-picker-item input[type="color"] {
