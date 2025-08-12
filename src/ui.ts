@@ -83,10 +83,7 @@ export function initializeColorPickers() {
     // Add custom color section
     const customColorSection = document.createElement('div');
     customColorSection.className = 'custom-color-section';
-    
-    const customColorTitle = document.createElement('h5');
-    customColorTitle.textContent = 'Custom Colors';
-    customColorSection.appendChild(customColorTitle);
+    customColorSection.style.gridColumn = 'span 2';
     
     // Container for custom color pickers
     const customColorContainer = document.createElement('div');
@@ -99,32 +96,7 @@ export function initializeColorPickers() {
     // Add new custom color row
     const addCustomColorRow = document.createElement('div');
     addCustomColorRow.className = 'color-picker-item';
-    
-    const addButton = document.createElement('button');
-    addButton.textContent = '+';
-    addButton.style.marginRight = '10px';
-    addButton.addEventListener('click', () => {
-        const blockId = parseInt((addCustomColorRow.querySelector('#new-block-id') as HTMLSelectElement).value);
-        const color = (addCustomColorRow.querySelector('#new-color-picker') as HTMLInputElement).value;
-        
-        if (isNaN(blockId) || blockId < 0) {
-            alert('Please select a valid block');
-            return;
-        }
-        
-        // Update color
-        currentColors[blockId] = color;
-        
-        // Re-render the slice
-        const rawData = document.getElementById('raw-data')?.textContent;
-        const ySlider = document.getElementById('y-slider') as HTMLInputElement;
-        if (rawData && ySlider) {
-            displaySlice(rawData, parseInt(ySlider.value));
-        }
-        
-        // Re-render custom color pickers
-        renderCustomColorPickers(customColorContainer);
-    });
+    addCustomColorRow.style.gridColumn = 'span 2';
     
     // Create select element for block types
     const blockSelect = document.createElement('select');
@@ -151,9 +123,35 @@ export function initializeColorPickers() {
     colorPicker.id = 'new-color-picker';
     colorPicker.value = '#cccccc';
     
-    addCustomColorRow.appendChild(addButton);
+    const addButton = document.createElement('button');
+    addButton.textContent = '+';
+    addButton.style.marginLeft = 'auto';  // Changed from marginRight to marginLeft: auto
+    addButton.addEventListener('click', () => {
+        const blockId = parseInt((addCustomColorRow.querySelector('#new-block-id') as HTMLSelectElement).value);
+        const color = (addCustomColorRow.querySelector('#new-color-picker') as HTMLInputElement).value;
+        
+        if (isNaN(blockId) || blockId < 0) {
+            alert('Please select a valid block');
+            return;
+        }
+        
+        // Update color
+        currentColors[blockId] = color;
+        
+        // Re-render the slice
+        const rawData = document.getElementById('raw-data')?.textContent;
+        const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+        if (rawData && ySlider) {
+            displaySlice(rawData, parseInt(ySlider.value));
+        }
+        
+        // Re-render custom color pickers
+        renderCustomColorPickers(customColorContainer);
+    });
+    
     addCustomColorRow.appendChild(blockSelect);
     addCustomColorRow.appendChild(colorPicker);
+    addCustomColorRow.appendChild(addButton);  // Moved addButton to the end
     customColorSection.appendChild(addCustomColorRow);
     
     container.appendChild(customColorSection);
@@ -179,7 +177,7 @@ function renderCustomColorPickers(container: HTMLElement) {
         }
     });
     
-    // Render custom colors
+    // Render custom colors in a grid layout (2 columns)
     customColors.forEach(colorItem => {
         const item = document.createElement('div');
         item.className = 'color-picker-item';

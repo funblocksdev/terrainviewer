@@ -211,8 +211,15 @@ main {
     border-radius: 8px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    row-gap: 0.1rem; /* 保持行间距为0.5rem */
-    column-gap: 5rem; /* 将列间距从1rem增加到1.5rem */
+    row-gap: 0.1rem;
+    column-gap: 5rem;
+}
+
+#custom-color-container {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.1rem;
 }
 
 .color-picker-item label {
