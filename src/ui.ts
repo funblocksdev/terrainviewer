@@ -79,9 +79,10 @@ export function initializeColorPickers() {
         const removeButton = document.createElement('button');
         removeButton.textContent = '×';
         removeButton.style.marginLeft = '5px';
+        // 在删除颜色时设置为白色而不是灰色
         removeButton.addEventListener('click', () => {
             delete currentColors[type.id];
-            picker.value = '#cccccc'; // Set to default gray color
+            picker.value = '#ffffff'; // Set to default white color
             const rawData = document.getElementById('raw-data')?.textContent;
             const ySlider = document.getElementById('y-slider') as HTMLInputElement;
             if (rawData && ySlider) {
@@ -133,11 +134,18 @@ export function initializeColorPickers() {
         blockSelect.appendChild(option);
     });
     
+    // 新添加的自定义颜色选择器默认值设置为白色
     const colorPicker = document.createElement('input');
     colorPicker.type = 'color';
     colorPicker.id = 'new-color-picker';
-    colorPicker.value = '#cccccc';
+    colorPicker.value = '#ffffff';
     
+    // 自定义颜色对话框中的颜色选择器默认值也设置为白色
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.value = '#ffffff';
+    colorInput.style.display = 'block';
+    colorInput.style.marginBottom = '15px';
     const addButton = document.createElement('button');
     addButton.textContent = '+';
     addButton.style.marginLeft = 'auto';  // Changed from marginRight to marginLeft: auto
