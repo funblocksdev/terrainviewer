@@ -196,8 +196,30 @@ main {
 .color-picker-item {
     display: flex;
     align-items: center;
-    gap: 8px; /* 统一间距 */
+    gap: 8px;
     margin-bottom: 0.25rem;
+    width: 100%;
+}
+
+.color-picker-item button {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+#custom-color-container {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.1rem;
+    width: 100%;
+}
+
+.custom-color-section .color-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.25rem;
+    width: 100%;
 }
 
 #color-picker-container button {
