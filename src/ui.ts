@@ -1,3 +1,5 @@
+import { objects, objectsById } from '@dust/world/internal';
+
 const defaultColors: { [key: number]: string } = {
     1: '#c8fffc',   // air
     4: '#888888',   // stone
@@ -78,10 +80,265 @@ export function initializeColorPickers() {
         container.appendChild(item);
     });
 
+    // Add custom color section
+    const customColorSection = document.createElement('div');
+    customColorSection.className = 'custom-color-section';
+    
+    const customColorTitle = document.createElement('h5');
+    customColorTitle.textContent = 'Custom Colors';
+    customColorSection.appendChild(customColorTitle);
+    
+    // Container for custom color pickers
+    const customColorContainer = document.createElement('div');
+    customColorContainer.id = 'custom-color-container';
+    customColorSection.appendChild(customColorContainer);
+    
+    // Add existing custom colors
+    renderCustomColorPickers(customColorContainer);
+    
+    // Add new custom color row
+    const addCustomColorRow = document.createElement('div');
+    addCustomColorRow.className = 'color-picker-item';
+    
+    const addButton = document.createElement('button');
+    addButton.textContent = '+';
+    addButton.style.marginRight = '10px';
+    addButton.addEventListener('click', () => {
+        const blockId = parseInt((addCustomColorRow.querySelector('#new-block-id') as HTMLSelectElement).value);
+        const color = (addCustomColorRow.querySelector('#new-color-picker') as HTMLInputElement).value;
+        
+        if (isNaN(blockId) || blockId < 0) {
+            alert('Please select a valid block');
+            return;
+        }
+        
+        // Update color
+        currentColors[blockId] = color;
+        
+        // Re-render the slice
+        const rawData = document.getElementById('raw-data')?.textContent;
+        const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+        if (rawData && ySlider) {
+            displaySlice(rawData, parseInt(ySlider.value));
+        }
+        
+        // Re-render custom color pickers
+        renderCustomColorPickers(customColorContainer);
+    });
+    
+    // Create select element for block types
+    const blockSelect = document.createElement('select');
+    blockSelect.id = 'new-block-id';
+    blockSelect.style.marginRight = '10px';
+    blockSelect.style.width = '120px';
+    
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select Block';
+    blockSelect.appendChild(defaultOption);
+    
+    // Add options from objects
+    objects.forEach(obj => {
+        const option = document.createElement('option');
+        option.value = obj.id.toString();
+        option.textContent = `${obj.name} (${obj.id})`;
+        blockSelect.appendChild(option);
+    });
+    
+    const colorPicker = document.createElement('input');
+    colorPicker.type = 'color';
+    colorPicker.id = 'new-color-picker';
+    colorPicker.value = '#cccccc';
+    
+    addCustomColorRow.appendChild(addButton);
+    addCustomColorRow.appendChild(blockSelect);
+    addCustomColorRow.appendChild(colorPicker);
+    customColorSection.appendChild(addCustomColorRow);
+    
+    container.appendChild(customColorSection);
+
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset to Default';
     resetButton.addEventListener('click', resetColorsToDefault);
     container.appendChild(resetButton);
+}
+
+function renderCustomColorPickers(container: HTMLElement) {
+    // Clear container
+    container.innerHTML = '';
+    
+    // Get custom colors (not in default colors)
+    const defaultColorIds = [1, 4, 2, 32, 21, 22];
+    const customColors: { id: number; color: string }[] = [];
+    
+    Object.keys(currentColors).forEach(type => {
+        const id = parseInt(type);
+        if (!defaultColorIds.includes(id)) {
+            customColors.push({ id, color: currentColors[id] });
+        }
+    });
+    
+    // Render custom colors
+    customColors.forEach(colorItem => {
+        const item = document.createElement('div');
+        item.className = 'color-picker-item';
+        
+        // Get object name by ID
+        const objectDefinition = objectsById[colorItem.id];
+        const labelName = objectDefinition ? `${objectDefinition.name} (${colorItem.id})` : `ID ${colorItem.id}`;
+        
+        const label = document.createElement('label');
+        label.textContent = labelName + ':';
+        label.setAttribute('for', `color-picker-${colorItem.id}`);
+        
+        const picker = document.createElement('input');
+        picker.type = 'color';
+        picker.id = `color-picker-${colorItem.id}`;
+        picker.value = colorItem.color;
+        picker.addEventListener('input', function() {
+            currentColors[colorItem.id] = this.value;
+            const rawData = document.getElementById('raw-data')?.textContent;
+            const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+            if (rawData && ySlider) {
+                displaySlice(rawData, parseInt(ySlider.value));
+            }
+        });
+        
+        // Add remove button
+        const removeButton = document.createElement('button');
+        removeButton.textContent = '×';
+        removeButton.style.marginLeft = '5px';
+        removeButton.addEventListener('click', () => {
+            delete currentColors[colorItem.id];
+            item.remove();
+            
+            // Re-render the slice
+            const rawData = document.getElementById('raw-data')?.textContent;
+            const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+            if (rawData && ySlider) {
+                displaySlice(rawData, parseInt(ySlider.value));
+            }
+        });
+        
+        item.appendChild(label);
+        item.appendChild(picker);
+        item.appendChild(removeButton);
+        container.appendChild(item);
+    });
+}
+
+// Function to show custom color dialog
+function showCustomColorDialog() {
+    // Create dialog container
+    const dialog = document.createElement('div');
+    dialog.style.position = 'fixed';
+    dialog.style.left = '50%';
+    dialog.style.top = '50%';
+    dialog.style.transform = 'translate(-50%, -50%)';
+    dialog.style.backgroundColor = 'white';
+    dialog.style.padding = '20px';
+    dialog.style.border = '1px solid #ccc';
+    dialog.style.borderRadius = '5px';
+    dialog.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+    dialog.style.zIndex = '1000';
+    
+    // Create backdrop
+    const backdrop = document.createElement('div');
+    backdrop.style.position = 'fixed';
+    backdrop.style.left = '0';
+    backdrop.style.top = '0';
+    backdrop.style.width = '100%';
+    backdrop.style.height = '100%';
+    backdrop.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    backdrop.style.zIndex = '999';
+    
+    // Create form elements
+    const titleLabel = document.createElement('h3');
+    titleLabel.textContent = 'Add Custom Color';
+    
+    const blockIdLabel = document.createElement('label');
+    blockIdLabel.textContent = 'Block ID:';
+    blockIdLabel.style.display = 'block';
+    blockIdLabel.style.marginBottom = '5px';
+    
+    const blockIdInput = document.createElement('input');
+    blockIdInput.type = 'number';
+    blockIdInput.min = '0';
+    blockIdInput.style.display = 'block';
+    blockIdInput.style.marginBottom = '10px';
+    blockIdInput.style.padding = '5px';
+    
+    const colorLabel = document.createElement('label');
+    colorLabel.textContent = 'Color:';
+    colorLabel.style.display = 'block';
+    colorLabel.style.marginBottom = '5px';
+    
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.value = '#cccccc';
+    colorInput.style.display = 'block';
+    colorInput.style.marginBottom = '15px';
+    
+    const buttonContainer = document.createElement('div');
+    
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add';
+    addButton.style.marginRight = '10px';
+    addButton.style.padding = '5px 10px';
+    
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+    cancelButton.style.padding = '5px 10px';
+    
+    // Add event listeners
+    addButton.addEventListener('click', () => {
+        const blockId = parseInt(blockIdInput.value);
+        if (isNaN(blockId) || blockId < 0) {
+            alert('Please enter a valid block ID');
+            return;
+        }
+        
+        // Update color
+        currentColors[blockId] = colorInput.value;
+        
+        // Close dialog
+        document.body.removeChild(backdrop);
+        document.body.removeChild(dialog);
+        
+        // Re-render the slice
+        const rawData = document.getElementById('raw-data')?.textContent;
+        const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+        if (rawData && ySlider) {
+            displaySlice(rawData, parseInt(ySlider.value));
+        }
+        
+        // Update color pickers to show the new custom color
+        initializeColorPickers();
+    });
+    
+    cancelButton.addEventListener('click', () => {
+        document.body.removeChild(backdrop);
+        document.body.removeChild(dialog);
+    });
+    
+    // Assemble dialog
+    buttonContainer.appendChild(addButton);
+    buttonContainer.appendChild(cancelButton);
+    
+    dialog.appendChild(titleLabel);
+    dialog.appendChild(blockIdLabel);
+    dialog.appendChild(blockIdInput);
+    dialog.appendChild(colorLabel);
+    dialog.appendChild(colorInput);
+    dialog.appendChild(buttonContainer);
+    
+    // Add to document
+    document.body.appendChild(backdrop);
+    document.body.appendChild(dialog);
+    
+    // Focus on block ID input
+    blockIdInput.focus();
 }
 
 export function displaySlice(data: string, yValue: number, highlight?: {x: number, y: number, z: number}) {
