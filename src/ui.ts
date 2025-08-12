@@ -46,12 +46,12 @@ export function initializeColorPickers() {
     container.appendChild(title);
 
     const blockTypes = [
-        { id: 1, name: 'Air' },
-        { id: 4, name: 'Stone' },
-        { id: 2, name: 'Water' },
-        { id: 32, name: 'Sand' },
-        { id: 21, name: 'Grass' },
-        { id: 22, name: 'Dirt' }
+        { id: 1, name: objectsById[1]?.name || 'Air' },
+        { id: 4, name: objectsById[4]?.name || 'Stone' },
+        { id: 2, name: objectsById[2]?.name || 'Water' },
+        { id: 32, name: objectsById[32]?.name || 'Sand' },
+        { id: 21, name: objectsById[21]?.name || 'Grass' },
+        { id: 22, name: objectsById[22]?.name || 'Dirt' }
     ];
 
     blockTypes.forEach(type => {
@@ -59,7 +59,7 @@ export function initializeColorPickers() {
         item.className = 'color-picker-item';
 
         const label = document.createElement('label');
-        label.textContent = type.name + ':';
+        label.textContent = `${type.name} (${type.id}):`;
         label.setAttribute('for', `color-picker-${type.id}`);
 
         const picker = document.createElement('input');
