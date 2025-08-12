@@ -75,8 +75,23 @@ export function initializeColorPickers() {
             }
         });
 
+        // Add remove button for default colors
+        const removeButton = document.createElement('button');
+        removeButton.textContent = '×';
+        removeButton.style.marginLeft = '5px';
+        removeButton.addEventListener('click', () => {
+            delete currentColors[type.id];
+            picker.value = '#cccccc'; // Set to default gray color
+            const rawData = document.getElementById('raw-data')?.textContent;
+            const ySlider = document.getElementById('y-slider') as HTMLInputElement;
+            if (rawData && ySlider) {
+                displaySlice(rawData, parseInt(ySlider.value));
+            }
+        });
+
         item.appendChild(label);
         item.appendChild(picker);
+        item.appendChild(removeButton);
         container.appendChild(item);
     });
 
