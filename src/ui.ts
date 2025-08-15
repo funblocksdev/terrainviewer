@@ -19,7 +19,9 @@ export const setIsStashSyncEnabled = (value: boolean) => {
             if (debugInfo) {
                 debugInfo.style.display = 'block';
                 document.getElementById('toggle-debug-info')?.classList.add('rotated');
-                debugInfo.textContent = JSON.stringify(status, null, 2);
+                debugInfo.textContent = JSON.stringify(status, (_key, value) =>
+                    typeof value === 'bigint' ? value.toString() : value
+                , 2);
             }
         });
     } else {
