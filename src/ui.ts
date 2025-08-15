@@ -1,5 +1,7 @@
 import { objects, objectsById } from '@dust/world/internal';
 import { startSync, subscribeToSyncStatus } from './mudSync';
+import { SyncStep } from '@latticexyz/store-sync';
+import { handleFetchTerrain } from './handlers';
 
 let isStashSyncEnabled = false;
 let unsubscribe: (() => void) | undefined;
@@ -22,6 +24,10 @@ export const setIsStashSyncEnabled = (value: boolean) => {
                 debugInfo.textContent = JSON.stringify(status, (_key, value) =>
                     typeof value === 'bigint' ? value.toString() : value
                 , 2);
+            }
+            if (status.step === SyncStep.LIVE) {
+                console.log("Sync is LIVE. Re-fetching terrain data...");
+                handleFetchTerrain();
             }
         });
     } else {
@@ -287,6 +293,7 @@ function renderCustomColorPickers(container: HTMLElement) {
 }
 
 export function displaySlice(data: string, yValue: number, highlight?: {x: number, y: number, z: number}) {
+    console.log("displaySlice called with data:", data ? data.substring(0, 100) + "..." : "null", "yValue:", yValue, "highlight:", highlight);
     const container = document.getElementById('slice-container');
     if (!container) return;
 

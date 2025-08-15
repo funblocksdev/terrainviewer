@@ -29,6 +29,7 @@ export function initializeApp() {
         const stashSyncToggle = document.getElementById('stash-sync-toggle') as HTMLInputElement;
         if (stashSyncToggle) {
             stashSyncToggle.addEventListener('change', () => {
+                console.log("Stash Sync Toggle changed. New value:", stashSyncToggle.checked);
                 setIsStashSyncEnabled(stashSyncToggle.checked);
             });
         }
