@@ -1,10 +1,38 @@
 import { objects, objectsById } from '@dust/world/internal';
+import { startSync, subscribeToSyncStatus } from './mudSync';
 
 let isStashSyncEnabled = false;
+let unsubscribe: (() => void) | undefined;
 
 export const getIsStashSyncEnabled = () => isStashSyncEnabled;
 export const setIsStashSyncEnabled = (value: boolean) => {
     isStashSyncEnabled = value;
+    console.log(`Stash sync enabled: ${isStashSyncEnabled}`);
+
+    if (isStashSyncEnabled) {
+        console.log("Starting sync...");
+        startSync();
+        console.log("Subscribing to sync status for debugging...");
+        unsubscribe = subscribeToSyncStatus((status) => {
+            console.log("Debug (from ui.ts) - Sync Status:", status);
+            const debugInfo = document.getElementById('debug-info');
+            if (debugInfo) {
+                debugInfo.style.display = 'block';
+                document.getElementById('toggle-debug-info')?.classList.add('rotated');
+                debugInfo.textContent = JSON.stringify(status, null, 2);
+            }
+        });
+    } else {
+        if (unsubscribe) {
+            console.log("Unsubscribing from sync status.");
+            unsubscribe();
+            unsubscribe = undefined;
+            const debugInfo = document.getElementById('debug-info');
+            if (debugInfo) {
+                debugInfo.textContent = "Sync stopped.";
+            }
+        }
+    }
 };
 
 const defaultColors: { [key: number]: string } = {

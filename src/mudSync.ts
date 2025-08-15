@@ -74,16 +74,21 @@ export type SyncStatus = {
 };
 
 export function getSyncStatus(): SyncStatus {
+  console.log("Getting sync status...");
   const progress = stash.getRecord({ table: SyncProgress, key: {} }) ?? initialProgress;
-  return {
+  const status = {
     ...progress,
     step: progress.step as SyncStep,
     isLive: progress.step === SyncStep.LIVE,
   };
+  console.log("Current sync status:", status);
+  return status;
 }
 
 export function subscribeToSyncStatus(callback: (status: SyncStatus) => void): () => void {
+  console.log("Subscribing to sync status...");
   const unsubscribe = (stash as any).subscribe(() => {
+    console.log("Received sync status update from stash.");
     callback(getSyncStatus());
   });
   callback(getSyncStatus()); // Initial call
