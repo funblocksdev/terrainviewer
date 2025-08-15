@@ -1,5 +1,5 @@
 
-import { createStash } from "@latticexyz/stash/internal";
+import { createStash, subscribeStash, getRecord } from "@latticexyz/stash/internal";
 import type { SyncFilter } from "@latticexyz/store-sync";
 import dustWorldConfig from "@dust/world/mud.config";
 // TODO: Resolve the dependency on contracts/mud.config
@@ -75,7 +75,11 @@ export type SyncStatus = {
 
 export function getSyncStatus(): SyncStatus {
   console.log("Getting sync status...");
-  const progress = stash.getRecord({ table: SyncProgress, key: {} }) ?? initialProgress;
+  const progress = getRecord({
+    stash,
+    table: SyncProgress,
+    key: {}
+  }) ?? initialProgress;
   const status = {
     ...progress,
     step: progress.step as SyncStep,
@@ -87,10 +91,43 @@ export function getSyncStatus(): SyncStatus {
 
 export function subscribeToSyncStatus(callback: (status: SyncStatus) => void): () => void {
   console.log("Subscribing to sync status...");
-  const unsubscribe = (stash as any).subscribe(() => {
-    console.log("Received sync status update from stash.");
-    callback(getSyncStatus());
-  });
-  callback(getSyncStatus()); // Initial call
+  // 订阅同步状态变化 
+  const unsubscribe = subscribeStash({ 
+    stash, 
+    subscriber: () => {
+      // 当stash中的任何数据更新时，这个回调会被触发 
+      // 你可以在这里获取最新的同步状态 
+      const progress = getRecord({ 
+        stash, 
+        table: SyncProgress, 
+        key: {} 
+      }) ?? initialProgress; 
+      
+      const status = { 
+        ...progress, 
+        step: progress.step as SyncStep, 
+        isLive: progress.step === SyncStep.LIVE, 
+      }; 
+      
+      console.log("Current sync status:", status); 
+      callback(status);
+      // 在这里处理状态更新，比如更新UI或触发其他逻辑 
+    } 
+  }); 
+  
+  // 获取初始状态 
+  const progress = getRecord({ 
+    stash, 
+    table: SyncProgress, 
+    key: {} 
+  }) ?? initialProgress;
+  
+  const initialStatus: SyncStatus = {
+    ...progress,
+    step: progress.step as SyncStep,
+    isLive: progress.step === SyncStep.LIVE,
+  };
+  callback(initialStatus);
+  
   return unsubscribe;
 }
