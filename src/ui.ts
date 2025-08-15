@@ -1,5 +1,12 @@
 import { objects, objectsById } from '@dust/world/internal';
 
+let isStashSyncEnabled = false;
+
+export const getIsStashSyncEnabled = () => isStashSyncEnabled;
+export const setIsStashSyncEnabled = (value: boolean) => {
+    isStashSyncEnabled = value;
+};
+
 const defaultColors: { [key: number]: string } = {
     1: '#c8fffc',   // air
     4: '#888888',   // stone

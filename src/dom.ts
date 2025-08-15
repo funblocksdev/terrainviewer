@@ -1,5 +1,5 @@
 import { voxelToChunkPos, chunkToVoxelPos, CHUNK_WIDTH } from './terrain';
-import { displaySlice, initializeColorPickers } from './ui';
+import { displaySlice, initializeColorPickers, setIsStashSyncEnabled } from './ui';
 import { handleFetchTerrain, getPlayerPosition, clearBlueprint } from './handlers';
 
 export function initializeApp() {
@@ -23,6 +23,13 @@ export function initializeApp() {
                     // If toggled off, clear the blueprint
                     clearBlueprint();
                 }
+            });
+        }
+
+        const stashSyncToggle = document.getElementById('stash-sync-toggle') as HTMLInputElement;
+        if (stashSyncToggle) {
+            stashSyncToggle.addEventListener('change', () => {
+                setIsStashSyncEnabled(stashSyncToggle.checked);
             });
         }
 
