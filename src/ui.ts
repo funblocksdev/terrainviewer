@@ -5,16 +5,34 @@ import { handleFetchTerrain } from './handlers';
 
 let isStashSyncEnabled = false;
 let unsubscribe: (() => void) | undefined;
+let liveDataLabel: HTMLSpanElement | null = null;
 
 export const getIsStashSyncEnabled = () => isStashSyncEnabled;
 export const setIsStashSyncEnabled = (value: boolean) => {
     isStashSyncEnabled = value;
     console.log(`Stash sync enabled: ${isStashSyncEnabled}`);
 
+    // 获取标签元素引用
+    if (!liveDataLabel) {
+        const stashSyncToggle = document.getElementById('stash-sync-toggle');
+        if (stashSyncToggle) {
+            const switchContainer = stashSyncToggle.closest('.switch-container');
+            if (switchContainer) {
+                liveDataLabel = switchContainer.querySelector('.switch-label');
+            }
+        }
+    }
+
     if (isStashSyncEnabled) {
+        // 当同步开始时，将标签文本改为"Syncing..."
+        if (liveDataLabel) {
+            liveDataLabel.textContent = "Syncing...";
+        }
+
         console.log("Starting sync...");
         startSync();
         console.log("Subscribing to sync status for debugging...");
+        let lastMessage = "";
         unsubscribe = subscribeToSyncStatus((status) => {
             console.log("Debug (from ui.ts) - Sync Status:", status);
             const debugInfo = document.getElementById('debug-info');
@@ -25,6 +43,20 @@ export const setIsStashSyncEnabled = (value: boolean) => {
                     typeof value === 'bigint' ? value.toString() : value
                 , 2);
             }
+
+            // 当 status.message 变化时，更新标签以反映当前的同步步骤
+            if (liveDataLabel && status.message && status.message !== lastMessage) {
+                lastMessage = status.message;
+                if (status.isLive) {
+                    liveDataLabel.textContent = "Live";
+                } else {
+                    liveDataLabel.textContent = `Syncing: ${status.message}`;
+                }
+            } else if (liveDataLabel && status.isLive) {
+                // 当 status.isLive 变为 true 时，将标签改为"Live"
+                liveDataLabel.textContent = "Live";
+            }
+
             if (status.step === SyncStep.LIVE) {
                 console.log("Sync is LIVE. Re-fetching terrain data...");
                 handleFetchTerrain();
@@ -39,6 +71,10 @@ export const setIsStashSyncEnabled = (value: boolean) => {
             if (debugInfo) {
                 debugInfo.textContent = "Sync stopped.";
             }
+        }
+        // 当同步停止时，将标签改回"Live Data"
+        if (liveDataLabel) {
+            liveDataLabel.textContent = "Live Data";
         }
     }
 };
