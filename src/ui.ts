@@ -1,5 +1,5 @@
-import { objects, objectsById } from '@dust/world/internal';
-import { startSync, subscribeToSyncStatus } from './mudSync';
+import { objects, objectsById, encodeBlock } from '@dust/world/internal';
+import { getEntityObjectType, startSync, subscribeToSyncStatus } from './mudSync';
 import { SyncStep } from '@latticexyz/store-sync';
 import { handleFetchTerrain } from './handlers';
 
@@ -320,7 +320,19 @@ export function displaySlice(data: string, yValue: number, highlight?: {x: numbe
         for (let x = 0; x < 16; x++) {
             const index = 4 + x * 256 + relativeY * 16 + z;
             const byte = data.substring(index * 2, index * 2 + 2);
-            const blockType = parseInt(byte, 16);
+            let blockType = parseInt(byte, 16);
+
+            if (getIsStashSyncEnabled()) {
+                const worldX = chunkX + x;
+                const worldY = yValue;
+                const worldZ = chunkZ + z;
+                const entityId = encodeBlock([worldX, worldY, worldZ]);
+                const stashObjectType = getEntityObjectType(entityId);
+
+                if (stashObjectType !== undefined) {
+                    blockType = stashObjectType;
+                }
+            }
 
             const cube = document.createElement('div');
             cube.className = 'cube';

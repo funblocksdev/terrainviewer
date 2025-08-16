@@ -62,6 +62,15 @@ export function startSync() {
   });
 }
 
+export function getEntityObjectType(entityId: `0x${string}`): number | undefined {
+    const record = getRecord({
+        stash,
+        table: tables.EntityObjectType,
+        key: { entityId },
+    });
+    return record?.objectType;
+}
+
 
 // --- From syncStatus.ts ---
 export type SyncStatus = {
