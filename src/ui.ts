@@ -33,15 +33,21 @@ export const setIsStashSyncEnabled = (value: boolean) => {
         startSync();
         console.log("Subscribing to sync status for debugging...");
         let lastMessage = "";
+        let isLiveReached = false;
+        
         unsubscribe = subscribeToSyncStatus((status) => {
             console.log("Debug (from ui.ts) - Sync Status:", status);
-            const debugInfo = document.getElementById('debug-info');
-            if (debugInfo) {
-                debugInfo.style.display = 'block';
-                document.getElementById('toggle-debug-info')?.classList.add('rotated');
-                debugInfo.textContent = JSON.stringify(status, (_key, value) =>
-                    typeof value === 'bigint' ? value.toString() : value
-                , 2);
+            
+            // 只有在非LIVE状态下才更新debug信息，避免频繁刷新
+            if (!isLiveReached) {
+                const debugInfo = document.getElementById('debug-info');
+                if (debugInfo) {
+                    debugInfo.style.display = 'block';
+                    document.getElementById('toggle-debug-info')?.classList.add('rotated');
+                    debugInfo.textContent = JSON.stringify(status, (_key, value) =>
+                        typeof value === 'bigint' ? value.toString() : value
+                    , 2);
+                }
             }
 
             // 当 status.message 变化时，更新标签以反映当前的同步步骤
@@ -49,17 +55,20 @@ export const setIsStashSyncEnabled = (value: boolean) => {
                 lastMessage = status.message;
                 if (status.isLive) {
                     liveDataLabel.textContent = "Live";
+                    isLiveReached = true;
                 } else {
                     liveDataLabel.textContent = `Syncing: ${status.message}`;
                 }
-            } else if (liveDataLabel && status.isLive) {
+            } else if (liveDataLabel && status.isLive && !isLiveReached) {
                 // 当 status.isLive 变为 true 时，将标签改为"Live"
                 liveDataLabel.textContent = "Live";
+                isLiveReached = true;
             }
 
-            if (status.step === SyncStep.LIVE) {
+            if (status.step === SyncStep.LIVE && !isLiveReached) {
                 console.log("Sync is LIVE. Re-fetching terrain data...");
                 handleFetchTerrain();
+                isLiveReached = true;
             }
         });
     } else {
